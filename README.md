@@ -3,7 +3,7 @@
 # RunCat for GNOME Shell
 
 **RunCat** provides a key-frame animation to the GNOME Shell top bar. \
-Animation speed changes depending on CPU usage.
+Animation speed changes depending on `CPU usage` and `Memory Usage`.
 
 <br />
 
