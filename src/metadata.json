@@ -1,7 +1,7 @@
 {
   "name": "RunCat",
-  "description": "The cat tells you the CPU usage by running speed",
-  "uuid": "runcat@kolesnikov.se",
+  "description": "The cat tells about your system usages by running speed",
+  "uuid": "runcat@yoehwan.github.com",
   "shell-version": [
     "3.38",
     "40",
