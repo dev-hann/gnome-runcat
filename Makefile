@@ -3,7 +3,7 @@
 .PHONY : build clean install uninstall
 .DEFAULT_GOAL := help
 
-UUID = "runcat@kolesnikov.se"
+UUID = "runcat@gnome-shell-extensions.yoehwan.github.com"
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
 build: clean

@@ -1,11 +1,16 @@
 const PanelMenu = imports.ui.panelMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
-const { St, Clutter, GObject } = imports.gi;
+const {
+    St,
+    Clutter,
+    GObject,
+} = imports.gi;
 
 const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
+const { Memory } = Extension.imports.memory;
 const { IconProvider } = Extension.imports.iconProvider;
 
 // eslint-disable-next-line
@@ -16,6 +21,7 @@ var PanelMenuButton = GObject.registerClass(
             super._init(null, Extension.metadata.name);
 
             this.cpu = new Cpu();
+            this.memory = new Memory();
             this.iconProvider = new IconProvider();
 
             this.ui = new Map();
@@ -30,7 +36,9 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         get animationInterval() {
-            const utilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
+            const cpuUtilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
+            const memoryUtilizationCoefficient = this.memory.utilization > 100 ? 100 : this.memory.utilization;
+            const utilizationCoefficient = Math.max(cpuUtilizationCoefficient, memoryUtilizationCoefficient);
 
             // y = 5000/sqrt(x+30) - 400
             return Math.ceil(5000 / Math.sqrt(utilizationCoefficient + 30) - 400);
@@ -107,6 +115,13 @@ var PanelMenuButton = GObject.registerClass(
                 }
             }, 3000));
 
+            this.timers.set('memory', new Timer(() => {
+                try {
+                    this.memory.refresh();
+                } catch (e) {
+                    logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
+                }
+            }, 3000));
             this.timers.set(
                 'ui',
                 new Timer(() => {
@@ -117,14 +132,17 @@ var PanelMenuButton = GObject.registerClass(
 
                         if (!this.isRunnerHidden) {
                             const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                            this.ui.get('icon').set_gicon(
-                                isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
-                            );
+                            this.ui.get('icon')
+                                .set_gicon(
+                                    isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                                );
                         }
 
                         if (!this.isPercentageHidden) {
                             const utilization = Math.ceil(this.cpu.utilization || 0);
-                            this.ui.get('label').set_text(`${utilization}%`);
+                            const memoryUtilization = Math.ceil(this.memory.utilization || 0);
+                            this.ui.get('label')
+                                .set_text(`CPU : ${utilization}%  Memory : ${memoryUtilization}%`);
                         }
                     } catch (e) {
                         logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
