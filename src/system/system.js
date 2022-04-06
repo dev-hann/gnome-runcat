@@ -18,8 +18,9 @@ class System {
         console.log('Hello');
     }
 
+    // eslint-disable-next-line class-methods-use-this
     loadFileData() {
-        // return Gio.File.new_for_path(this.filePath);
+        throw new Error('Can\'t load contents of stat file');
     }
 }
 
