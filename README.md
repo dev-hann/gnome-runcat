@@ -41,5 +41,19 @@ $ make install
 ## macOS version
 Thanks to [Takuto Nakamura](https://github.com/Kyome22/menubar_runcat) for [the macOS version](https://kyome.io/runcat/index.html) and cat images.
 
+## Future
+* More Information.
+  * ~~Cpu~~
+  * ~~Memory~~
+  * Network
+  * Wifi
+  * Battery
+  * Disk
+* Update Setting UI & UX.
+  * Reordable System Info Items.
+* Launch Setting onClick tray.
+
 ---
 _Developed by [Sergei Kolesnikov](https://github.com/win0err)_
+
+_Maintained by [yoehwan](https://github.com/yoehwan)_
