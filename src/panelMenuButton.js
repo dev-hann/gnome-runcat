@@ -9,8 +9,8 @@ const {
 
 const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
-const { Cpu } = Extension.imports.cpu;
-const { Memory } = Extension.imports.memory;
+const { Cpu } = Extension.imports.system.cpu;
+const { Memory } = Extension.imports.system.memory;
 const { IconProvider } = Extension.imports.iconProvider;
 
 // eslint-disable-next-line
@@ -36,7 +36,7 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         get animationInterval() {
-            const cpuUtilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
+            const cpuUtilizationCoefficient = this.cpu.usage > 100 ? 100 : this.cpu.usage;
             const memoryUtilizationCoefficient = this.memory.utilization > 100 ? 100 : this.memory.utilization;
             const utilizationCoefficient = Math.max(cpuUtilizationCoefficient, memoryUtilizationCoefficient);
 
@@ -131,7 +131,7 @@ var PanelMenuButton = GObject.registerClass(
                         }
 
                         if (!this.isRunnerHidden) {
-                            const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
+                            const isRunningSpriteShown = this.cpu.usage > this.sleepingThreshold;
                             this.ui.get('icon')
                                 .set_gicon(
                                     isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
@@ -139,7 +139,7 @@ var PanelMenuButton = GObject.registerClass(
                         }
 
                         if (!this.isPercentageHidden) {
-                            const utilization = Math.ceil(this.cpu.utilization || 0);
+                            const utilization = Math.ceil(this.cpu.usage || 0);
                             const memoryUtilization = Math.ceil(this.memory.utilization || 0);
                             this.ui.get('label')
                                 .set_text(`CPU : ${utilization}%  Memory : ${memoryUtilization}%`);

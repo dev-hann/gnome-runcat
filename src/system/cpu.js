@@ -1,26 +1,26 @@
 const { Gio } = imports.gi;
+
 const ByteArray = imports.byteArray;
 const Config = imports.misc.config;
 
 const [major] = Config.PACKAGE_VERSION.split('.');
 const shellVersion = Number.parseInt(major, 10);
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Extension = ExtensionUtils.getCurrentExtension();
+const { System } = Extension.imports.system.system;
+
 // eslint-disable-next-line
-var Cpu = class Cpu {
+var Cpu = class Cpu extends System{
     constructor() {
-        this.lastActive = 0;
-        this.lastTotal = 0;
-
-        this.utilization = 0;
-
-        this.procStatFile = Gio.File.new_for_path('/proc/stat');
-
+        super();
+        this.file = Gio.File.new_for_path('/proc/stat');
         this.refresh();
     }
 
     refresh() {
         try {
-            const [success, contents] = this.procStatFile.load_contents(null);
+            const [success, contents] = this.file.load_contents(null);
             if (!success) {
                 throw new Error('Can\'t load contents of stat file');
             }
@@ -40,7 +40,7 @@ var Cpu = class Cpu {
                 , // eslint-disable-line
                 user,
                 nice,
-                system,
+                sys,
                 idle,
                 iowait,
                 irq, // eslint-disable-line
@@ -49,14 +49,13 @@ var Cpu = class Cpu {
                 guest, // eslint-disable-line
             ] = cpuInfo;
 
-            const active = user + system + nice + softirq + steal;
-            const total = user + system + nice + softirq + steal + idle + iowait;
+            const active = user + sys + nice + softirq + steal;
+            const total = user + sys + nice + softirq + steal + idle + iowait;
 
             const utilization = 100 * ((active - this.lastActive) / (total - this.lastTotal));
 
             this.lastActive = active;
             this.lastTotal = total;
-
             if (Number.isNaN(utilization)) {
                 const utilizationData = JSON.stringify({
                     active,
@@ -67,11 +66,11 @@ var Cpu = class Cpu {
                 throw new RangeError(`CPU utilization is NaN: ${utilizationData}`);
             }
 
-            this.utilization = utilization;
+            this.usage = utilization;
         } catch (e) {
             logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
         }
 
-        return this.utilization;
+        return this.usage;
     }
 };

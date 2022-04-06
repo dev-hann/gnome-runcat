@@ -3,7 +3,7 @@
 # RunCat for GNOME Shell
 
 **RunCat** provides a key-frame animation to the GNOME Shell top bar. \
-Animation speed changes depending on `CPU usage` and `Memory Usage`.
+Animation speed changes depending on `CPU usage` and `SystemMemory Usage`.
 
 <br />
 
@@ -43,8 +43,8 @@ Thanks to [Takuto Nakamura](https://github.com/Kyome22/menubar_runcat) for [the 
 
 ## Future
 * More Information.
-  * ~~Cpu~~
-  * ~~Memory~~
+  * ~~SystemCpu~~
+  * ~~SystemMemory~~
   * Network
   * Wifi
   * Battery
