@@ -33,10 +33,11 @@ var Memory = class Memory extends System {
         const [
             totalMem,
             freeMem,
-        ] = memInfo.slice(0, 2)
+            availableMem,
+        ] = memInfo.slice(0, 3)
             .map(n => parseInt(n.trim(), 10));
 
-        const active = totalMem - freeMem;
+        const active = availableMem;
         const total = totalMem;
         return [active, total];
     }
