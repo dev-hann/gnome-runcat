@@ -37,7 +37,7 @@ var PanelMenuButton = GObject.registerClass(
 
         get animationInterval() {
             const cpuUtilizationCoefficient = this.cpu.usage > 100 ? 100 : this.cpu.usage;
-            const memoryUtilizationCoefficient = this.memory.utilization > 100 ? 100 : this.memory.utilization;
+            const memoryUtilizationCoefficient = this.memory.usage > 100 ? 100 : this.memory.usage;
             const utilizationCoefficient = Math.max(cpuUtilizationCoefficient, memoryUtilizationCoefficient);
 
             // y = 5000/sqrt(x+30) - 400
@@ -140,7 +140,7 @@ var PanelMenuButton = GObject.registerClass(
 
                         if (!this.isPercentageHidden) {
                             const utilization = Math.ceil(this.cpu.usage || 0);
-                            const memoryUtilization = Math.ceil(this.memory.utilization || 0);
+                            const memoryUtilization = Math.ceil(this.memory.usage || 0);
                             this.ui.get('label')
                                 .set_text(`CPU : ${utilization}%  Memory : ${memoryUtilization}%`);
                         }
