@@ -37,7 +37,7 @@ var Memory = class Memory extends System {
         ] = memInfo.slice(0, 3)
             .map(n => parseInt(n.trim(), 10));
 
-        const active = availableMem;
+        const active = totalMem - availableMem;
         const total = totalMem;
         return [active, total];
     }
